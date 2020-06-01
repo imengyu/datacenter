@@ -1,8 +1,9 @@
 package com.imengyu.datacenter.web;
 
-import com.dreamfish.customersystem.entity.User;
-import com.dreamfish.customersystem.utils.Result;
+import com.imengyu.datacenter.entity.User;
 import com.imengyu.datacenter.service.AuthService;
+import com.imengyu.datacenter.utils.Result;
+import com.imengyu.datacenter.utils.encryption.AESUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Controller;
@@ -27,8 +28,9 @@ public class AuthController {
     //开始认证 登录
     @ResponseBody
     @PostMapping(value = "", name = "开始认证")
-    public Result authEntry(@RequestBody @NonNull User user) {
-        return authService.authDoLogin(user, request, response);
+    public Result authEntry(@RequestBody @NonNull User user,
+                            @RequestParam(value = "remember", required = false, defaultValue = "false") boolean remember) {
+        return authService.authDoLogin(user, remember, request, response);
     }
     //检测认证状态
     @ResponseBody
@@ -36,10 +38,17 @@ public class AuthController {
     public Result authTest() {
         return authService.authDoTest(request);
     }
+
     //结束认证 退出
     @ResponseBody
     @GetMapping(value = "/end", name = "结束认证")
     public Result authEnd(@RequestParam(value = "redirect_uri", required = false) String redirect_uri) throws IOException {
         return authService.authDoLogout(request, response, redirect_uri);
+    }
+
+    @ResponseBody
+    @GetMapping(value = "/gen-pass", name = "结束认证")
+    public String authDebugTestPASSWORD(@RequestParam(value = "pass") String pass, @RequestParam(value = "name") String name) throws IOException {
+        return AESUtils.encrypt(pass + "$" + name, AuthService.AUTH_KEY);
     }
 }

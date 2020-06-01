@@ -1,10 +1,10 @@
 package com.imengyu.datacenter.service.impl;
 
-import com.dreamfish.customersystem.entity.User;
-import com.dreamfish.customersystem.mapper.UserMapper;
-import com.dreamfish.customersystem.utils.Result;
-import com.dreamfish.customersystem.utils.ResultCodeEnum;
+import com.imengyu.datacenter.entity.User;
+import com.imengyu.datacenter.mapper.UserMapper;
 import com.imengyu.datacenter.service.UserService;
+import com.imengyu.datacenter.utils.Result;
+import com.imengyu.datacenter.utils.ResultCodeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

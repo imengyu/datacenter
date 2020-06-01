@@ -10,10 +10,12 @@ import java.util.List;
 
 @Mapper
 public interface UserMapper {
-    @Select("SELECT id,name,password,name,state,code FROM t_users WHERE name = #{name}")
-    List<User> findByUserCode(@Param("name") String name);
-    @Update("UPDATE t_users SET state = #{state} FROM t_users WHERE name = #{name}")
+    @Select("SELECT id,name,password,name,state FROM t_user WHERE name = #{name}")
+    List<User> findByUserName(@Param("name") String name);
+
+    @Update("UPDATE t_users SET state = #{state} FROM t_user WHERE name = #{name}")
     boolean updateUserStateByUserCode(@Param("state") boolean state, @Param("name") String name);
-    @Select("SELECT id,name,state,code,head_img FROM t_users WHERE id = #{id}")
+
+    @Select("SELECT id,name,state,userhead FROM t_user WHERE id = #{id}")
     User getUserById(@Param("id") int id);
 }

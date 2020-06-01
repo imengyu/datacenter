@@ -8,14 +8,14 @@ import java.io.Serializable;
 
 @Entity
 @DynamicInsert(true)
-@Table(name = "t_users")
+@Table(name = "t_user")
 public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
-    private String code;
+
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
     private String userhead;
@@ -43,14 +43,6 @@ public class User implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
     }
 
     public String getPassword() {

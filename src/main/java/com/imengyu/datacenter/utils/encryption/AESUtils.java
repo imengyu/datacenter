@@ -1,6 +1,6 @@
 package com.imengyu.datacenter.utils.encryption;
 
-import com.dreamfish.customersystem.utils.StringUtils;
+import com.imengyu.datacenter.utils.StringUtils;
 import org.apache.tomcat.util.codec.binary.Base64;
 
 import javax.crypto.*;

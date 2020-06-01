@@ -1,13 +1,13 @@
 package com.imengyu.datacenter.utils.auth;
 
 
-import com.dreamfish.customersystem.exception.InvalidArgumentException;
-import com.dreamfish.customersystem.services.AuthService;
-import com.dreamfish.customersystem.utils.StringUtils;
-import com.dreamfish.customersystem.utils.request.CookieUtils;
-import com.dreamfish.customersystem.utils.request.IpUtil;
-import com.dreamfish.customersystem.utils.request.RequestUtils;
-import com.dreamfish.customersystem.utils.response.AuthCode;
+import com.imengyu.datacenter.exception.InvalidArgumentException;
+import com.imengyu.datacenter.service.AuthService;
+import com.imengyu.datacenter.utils.StringUtils;
+import com.imengyu.datacenter.utils.request.CookieUtils;
+import com.imengyu.datacenter.utils.request.IpUtil;
+import com.imengyu.datacenter.utils.request.RequestUtils;
+import com.imengyu.datacenter.utils.response.AuthCode;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;

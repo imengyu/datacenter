@@ -1,6 +1,6 @@
 package com.imengyu.datacenter.utils.request;
 
-import com.dreamfish.customersystem.utils.StringUtils;
+import com.imengyu.datacenter.utils.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
