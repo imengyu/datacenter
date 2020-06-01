@@ -1,0 +1,51 @@
+
+# 数据库配置
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/dc?serverTimezone=GMT%2B8&zeroDateTimeBehavior=convertToNull
+    username: dcuser
+    password: dcuser
+    driver-class-name: com.mysql.jdbc.Driver
+
+  # JPA配置
+  jpa:
+    hibernate:
+      ddl-auto: update
+    # show-sql: true
+    # 数据库类型
+    database: mysql
+
+  # 返回日期格式配置
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+    serialization:
+      write-dates-as-timestamps: false
+    # JSON不返回空字段
+    default-property-inclusion: non_null
+    mapper:
+      sort-properties-alphabetically: true
+
+  # Redis 配置
+  redis:
+    host: 127.0.0.1
+    port: 6379
+
+  # 设置 session
+  session:
+    timeout: 2000
+    store-type: redis
+
+# 端口号
+server:
+  port: 8095
+
+# 驼峰命名
+mybatis:
+  configuration:
+    mapUnderscoreToCamelCase: true
+    map-underscore-to-camel-case: true
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.imengyu.datacenter.entity
+
+
