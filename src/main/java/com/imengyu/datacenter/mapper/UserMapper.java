@@ -13,6 +13,9 @@ public interface UserMapper {
     @Select("SELECT id,name,password,name,state FROM t_user WHERE name = #{name}")
     List<User> findByUserName(@Param("name") String name);
 
+    @Select("SELECT id,name,password,name,state FROM t_user WHERE name = #{name} LIMIT 1")
+    User findOneByUserName(@Param("name") String name);
+
     @Update("UPDATE t_users SET state = #{state} FROM t_user WHERE name = #{name}")
     boolean updateUserStateByUserCode(@Param("state") boolean state, @Param("name") String name);
 
