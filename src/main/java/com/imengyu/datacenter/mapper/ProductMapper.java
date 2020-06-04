@@ -1,9 +1,12 @@
 package com.imengyu.datacenter.mapper;
 
+import com.imengyu.datacenter.entity.Product;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
+
+import java.util.List;
 
 @Mapper
 public interface ProductMapper {
@@ -17,4 +20,6 @@ public interface ProductMapper {
   @Select("SELECT user_id FROM t_product WHERE id = #{id}")
   Integer getUserIdById(@Param("id") int id);
 
+  @Select("SELECT id, name FROM t_product WHERE user_id = #{userId}")
+  List<Product> getProductListByUserId(@Param("userId") int userId);
 }

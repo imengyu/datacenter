@@ -18,13 +18,13 @@ public interface DeviceGroupRepository extends JpaRepository<DeviceGroup, Intege
      * @param userId 用户ID
      * @param pageable 分页
      */
-    Page<Device> findByUserId(Integer userId, Pageable pageable);
+    Page<DeviceGroup> findByUserIdAndParentId(Integer userId, Integer parentId, Pageable pageable);
     /**
-     * 根据用户ID查询并搜索分页
-     * @param userId 用户ID
+     * 根据父D查询并分页
+     * @param parentId 父ID
      * @param pageable 分页
      */
-    Page<Device> findByUserId(Example<DeviceGroup> s, Integer userId, Pageable pageable);
+    Page<DeviceGroup> findByParentId(Integer parentId, Pageable pageable);
 
 
 }

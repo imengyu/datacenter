@@ -39,11 +39,19 @@ public class ProductServiceImpl implements ProductService {
   @Autowired
   private CommonPermissionCheckService commonPermissionCheckService = null;
 
+
+  @Override
+  public Result<Product> getProductListByUserId(Integer userId, HttpServletRequest request) {
+
+    if(PublicAuth.authGetUseId(request).intValue() != userId) return Result.failure(ResultCodeEnum.FORIBBEN);
+
+    return Result.success(productMapper.getProductListByUserId(userId));
+  }
+
   @Override
   public Result<Product> getProductPageByUserId(Integer id, PageRequest pageRequest,
                                             Product searchParam, HttpServletRequest request) {
-    int userId = PublicAuth.authGetUseId(request);
-    if(userId != id) return Result.failure(ResultCodeEnum.FORIBBEN);
+    if(PublicAuth.authGetUseId(request).intValue() != id) return Result.failure(ResultCodeEnum.FORIBBEN);
 
     if(searchParam == null) {
       return Result.success(productRepository.findByUserId(id, pageRequest));

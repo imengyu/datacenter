@@ -16,10 +16,11 @@ public class Device {
   private Integer id;
 
   private String name;
-  private String markName;
+  private String remarks;
 
   private Integer productId;
   private Integer groupId;
+  private Integer userId;
 
   private Integer enableState;
   private Integer nowState;
@@ -27,9 +28,56 @@ public class Device {
   private Date lastUpTime;
   private Date createAt;
 
+  private boolean uploadLog;
+
+  private boolean activated;
+  private Date activateTime;
+  private String currentConnectIp;
+
   private Integer authType;
   @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
   private String authSecretKey;
+
+
+  public boolean isUploadLog() {
+    return uploadLog;
+  }
+
+  public void setUploadLog(boolean uploadLog) {
+    this.uploadLog = uploadLog;
+  }
+
+  public Date getActivateTime() {
+    return activateTime;
+  }
+
+  public void setActivateTime(Date activateTime) {
+    this.activateTime = activateTime;
+  }
+
+  public String getCurrentConnectIp() {
+    return currentConnectIp;
+  }
+
+  public void setCurrentConnectIp(String currentConnectIp) {
+    this.currentConnectIp = currentConnectIp;
+  }
+
+  public boolean isActivated() {
+    return activated;
+  }
+
+  public void setActivated(boolean actived) {
+    this.activated = actived;
+  }
+
+  public Integer getUserId() {
+    return userId;
+  }
+
+  public void setUserId(Integer userId) {
+    this.userId = userId;
+  }
 
   public Integer getId() {
     return id;
@@ -47,12 +95,12 @@ public class Device {
     this.name = name;
   }
 
-  public String getMarkName() {
-    return markName;
+  public String getRemarks() {
+    return remarks;
   }
 
-  public void setMarkName(String markName) {
-    this.markName = markName;
+  public void setRemarks(String remarks) {
+    this.remarks = remarks;
   }
 
   public Integer getProductId() {

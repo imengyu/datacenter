@@ -6,6 +6,14 @@ public class CheckPermissionResult {
 
   private Result failResult;
   private boolean success;
+  private Integer authSuccessUserId;
+
+  public Integer getAuthSuccessUserId() {
+    return authSuccessUserId;
+  }
+  public void setAuthSuccessUserId(Integer authSuccessUserId) {
+    this.authSuccessUserId = authSuccessUserId;
+  }
 
   public Result getFailResult() {
     return failResult;
@@ -25,7 +33,8 @@ public class CheckPermissionResult {
     this.failResult = failResult;
     success = false;
   }
-  public CheckPermissionResult() {
+  public CheckPermissionResult(Integer authSuccessUserId) {
+    this.authSuccessUserId = authSuccessUserId;
     success = true;
   }
 }

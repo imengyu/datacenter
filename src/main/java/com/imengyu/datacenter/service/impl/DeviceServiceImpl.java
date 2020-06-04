@@ -7,6 +7,8 @@ import com.imengyu.datacenter.repository.DeviceRepository;
 import com.imengyu.datacenter.service.CommonPermissionCheckService;
 import com.imengyu.datacenter.service.DeviceService;
 import com.imengyu.datacenter.utils.Result;
+import com.imengyu.datacenter.utils.ResultCodeEnum;
+import com.imengyu.datacenter.utils.auth.PublicAuth;
 import com.imengyu.datacenter.utils.encryption.MD5Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
@@ -16,6 +18,8 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class DeviceServiceImpl implements DeviceService {
@@ -29,18 +33,19 @@ public class DeviceServiceImpl implements DeviceService {
   private CommonPermissionCheckService commonPermissionCheckService = null;
 
   @Override
-  public Result<Device> getDevicePageByProductId(Integer id, PageRequest pageRequest, Device searchParam, HttpServletRequest request) {
+  public Result<Device> getDevicePageByUserId(Integer id, PageRequest pageRequest, Device searchParam, HttpServletRequest request) {
 
-    CheckPermissionResult resultPermission = commonPermissionCheckService.checkProductPermission(id, request);
-    if(!resultPermission.getSuccess()) return (Result)resultPermission.getFailResult();
+    if(PublicAuth.authGetUseId(request).intValue() != id) return Result.failure(ResultCodeEnum.FORIBBEN);
 
     if(searchParam == null) {
-      return Result.success(deviceRepository.findByProductId(id, pageRequest));
+      return Result.success(deviceRepository.findByUserId(id, pageRequest));
     }else{
 
-      searchParam.setProductId(id);
+      searchParam.setUserId(id);
       ExampleMatcher matcher = ExampleMatcher.matching()
+              .withMatcher("user_id", ExampleMatcher.GenericPropertyMatchers.exact())
               .withMatcher("product_id", ExampleMatcher.GenericPropertyMatchers.exact())
+              .withMatcher("group_id", ExampleMatcher.GenericPropertyMatchers.exact())
               .withMatcher("name", ExampleMatcher.GenericPropertyMatchers.contains())
               .withMatcher("mark_name", ExampleMatcher.GenericPropertyMatchers.contains())
               .withMatcher("enable_state", ExampleMatcher.GenericPropertyMatchers.exact())
@@ -54,12 +59,12 @@ public class DeviceServiceImpl implements DeviceService {
   }
 
   @Override
-  public Result<Device> addDeviceByProductId(Integer id, Device device, HttpServletRequest request) {
+  public Result<Device> addDeviceByProductId(Device device, HttpServletRequest request) {
 
-    CheckPermissionResult resultPermission = commonPermissionCheckService.checkProductPermission(id, request);
+    CheckPermissionResult resultPermission = commonPermissionCheckService.checkProductPermission(device.getProductId(), request);
     if(!resultPermission.getSuccess()) return (Result)resultPermission.getFailResult();
-
-    device.setProductId(id);
+    
+    device.setUserId(resultPermission.getAuthSuccessUserId());
     device.setCreateAt(new Date());
     device.setAuthSecretKey(MD5Utils.encrypt(("MINI_IOT_DEVICE_" + device.getName()).getBytes()));
 
@@ -73,10 +78,28 @@ public class DeviceServiceImpl implements DeviceService {
     CheckPermissionResult resultPermission = commonPermissionCheckService.checkDevicePermission(device.getId(), request);
     if(!resultPermission.getSuccess()) return resultPermission.getFailResult();
 
-    deviceMapper.updateDeviceInfoById(deviceId, device.getName(), device.getMarkName(),
+    deviceMapper.updateDeviceInfoById(deviceId, device.getName(), device.getRemarks(),
             device.getEnableState(), device.getAuthType());
 
     return Result.success(device);
+  }
+
+  @Override
+  public Result<Device> updateDeviceEnableState(Integer deviceId, Boolean enable, HttpServletRequest request) {
+    CheckPermissionResult resultPermission = commonPermissionCheckService.checkDevicePermission(deviceId, request);
+    if(!resultPermission.getSuccess()) return resultPermission.getFailResult();
+
+    deviceMapper.updateDeviceEnableStateById(deviceId, enable);
+    return Result.success();
+  }
+
+  @Override
+  public Result<Device> getDeviceState(Integer deviceId, HttpServletRequest request) {
+
+    CheckPermissionResult resultPermission = commonPermissionCheckService.checkDevicePermission(deviceId, request);
+    if(!resultPermission.getSuccess()) return resultPermission.getFailResult();
+
+    return Result.success(deviceMapper.getDeviceStatusById(deviceId));
   }
 
   @Override
@@ -86,6 +109,17 @@ public class DeviceServiceImpl implements DeviceService {
     if(!resultPermission.getSuccess()) return resultPermission.getFailResult();
 
     return Result.success(deviceRepository.findById(deviceId).get());
+  }
+
+  @Override
+  public Result getAllDeviceOverview(HttpServletRequest request) {
+
+    Integer userId = PublicAuth.authGetUseId(request);
+    Map<String, Integer> overviewData = new HashMap<>();
+    overviewData.put("activatedCount", deviceMapper.getDeviceActivatedCountByUserId(userId));
+    overviewData.put("connectedCount", deviceMapper.getDeviceConnectedCountByUserId(userId));
+    overviewData.put("allCount", deviceMapper.getDeviceCountByUserId(userId));
+    return Result.success(overviewData);
   }
 
   @Override

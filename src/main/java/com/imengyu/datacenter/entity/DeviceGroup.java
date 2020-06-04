@@ -20,6 +20,36 @@ public class DeviceGroup {
 
   private Integer userId;
 
+  private Integer parentId;
+
+  private String identifier;
+
+  private String remarks;
+
+  public String getRemarks() {
+    return remarks;
+  }
+
+  public void setRemarks(String remarks) {
+    this.remarks = remarks;
+  }
+
+  public String getIdentifier() {
+    return identifier;
+  }
+
+  public void setIdentifier(String identifier) {
+    this.identifier = identifier;
+  }
+
+  public Integer getParentId() {
+    return parentId;
+  }
+
+  public void setParentId(Integer parentId) {
+    this.parentId = parentId;
+  }
+
   public Integer getUserId() {
     return userId;
   }

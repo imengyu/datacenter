@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import javax.servlet.http.HttpServletRequest;
 
 public interface ProductService {
+  Result<Product> getProductListByUserId(Integer userId, HttpServletRequest request);
   Result<Product> getProductPageByUserId(Integer id, PageRequest pageRequest, Product searchParam, HttpServletRequest request);
   Result<Product> addProductByUserId(Integer id, Product product, HttpServletRequest request);
   Result<Product> updateProduct(Product product, HttpServletRequest request);

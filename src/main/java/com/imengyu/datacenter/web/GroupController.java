@@ -28,7 +28,7 @@ public class GroupController {
     private HttpServletResponse response = null;
 
     /**
-     * 获取当前用户所有产品分页
+     * 获取当前用户所有分组分页
      * @param pageIndex 页码
      * @param pageSize 页大小
      */
@@ -43,49 +43,101 @@ public class GroupController {
                 PageRequestUtils.createPageRequestAndSort(pageIndex, pageSize, request),
                 UrlQueryTools.getObjectFromUrlJson(searchParam, DeviceGroup.class), request);
     }
+
     /**
-     * 删除产品
-     * @param productId 产品ID
+     * 获取当前用户所有分组分页
+     * @param pageIndex 页码
+     * @param pageSize 页大小
+     */
+    @RequestAuth
+    @ResponseBody
+    @GetMapping("/device-group/{parentId}/group/{pageIndex}/{pageSize}")
+    public Result getDeviceGroupsByParentId(
+            @PathVariable("parentId") Integer parentId,
+            @PathVariable("pageIndex") Integer pageIndex,
+            @PathVariable("pageSize") Integer pageSize,
+            @RequestParam(value = "search", required = false, defaultValue = "null") String searchParam) {
+        return deviceGroupService.getDeviceGroupPageByParentId(parentId,
+                PageRequestUtils.createPageRequestAndSort(pageIndex, pageSize, request),
+                UrlQueryTools.getObjectFromUrlJson(searchParam, DeviceGroup.class), request);
+    }
+
+
+    /**
+     * 删除分组
+     * @param groupId 分组ID
      */
     @ResponseBody
     @RequestAuth
-    @DeleteMapping("/device-group/{productId}")
-    public Result deleteDeviceGroup(@PathVariable("productId") Integer productId) {
-        return deviceGroupService.deleteDeviceGroupById(productId, request);
+    @DeleteMapping("/device-group/{groupId}")
+    public Result deleteDeviceGroup(@PathVariable("groupId") Integer groupId) {
+        return deviceGroupService.deleteDeviceGroupById(groupId, request);
     }
 
     /**
-     * 获取单个产品信息
-     * @param productId 产品ID
+     * 获取单个分组信息
+     * @param groupId 分组ID
      */
     @ResponseBody
     @RequestAuth
-    @GetMapping("/device-group/{productId}")
-    public Result getDeviceGroup(@PathVariable("productId") Integer productId) {
-        return deviceGroupService.getDeviceGroupById(productId, request);
+    @GetMapping("/device-group/{groupId}")
+    public Result getDeviceGroup(@PathVariable("groupId") Integer groupId) {
+        return deviceGroupService.getDeviceGroupById(groupId, request);
     }
 
     /**
-     * 更新单个产品信息
-     * @param productId 产品ID
-     * @param product 产品
+     * 更新单个分组信息
+     * @param groupId 分组ID
+     * @param group 分组
      */
     @ResponseBody
     @RequestAuth
-    @PutMapping("/device-group/{productId}")
-    public Result updateDeviceGroup(@PathVariable("productId") Integer productId, @RequestBody DeviceGroup product) {
-        return deviceGroupService.updateDeviceGroup(product, request);
+    @PutMapping("/device-group/{groupId}")
+    public Result updateDeviceGroup(@PathVariable("groupId") Integer groupId, @RequestBody DeviceGroup group) {
+        return deviceGroupService.updateDeviceGroup(group, request);
     }
 
     /**
-     * 添加产品信息
-     * @param product 产品
+     * 添加分组信息
+     * @param group 分组
      */
     @ResponseBody
     @RequestAuth
     @PostMapping("/device-group")
-    public Result addDeviceGroup(@RequestBody DeviceGroup product) {
-        return deviceGroupService.addDeviceGroupByUserId(PublicAuth.authGetUseId(request), product, request);
+    public Result addDeviceGroup(@RequestBody DeviceGroup group) {
+        return deviceGroupService.addDeviceGroupByUserId(PublicAuth.authGetUseId(request), group, request);
+    }
+
+    /**
+     * 添加分组信息至指定分组
+     * @param group 分组
+     */
+    @ResponseBody
+    @RequestAuth
+    @PostMapping("/device-group/{groupId}")
+    public Result addDeviceGroupByParentId(@PathVariable("groupId") Integer groupId, @RequestBody DeviceGroup group) {
+        return deviceGroupService.addDeviceGroupByParentId(groupId, group, request);
+    }
+
+
+
+    /**
+     * 获取当前用户所有分组（Tree）
+     */
+    @RequestAuth
+    @ResponseBody
+    @GetMapping("/device-group-tree")
+    public Result getUserDeviceGroupsTree() {
+        return deviceGroupService.getDeviceGroupTreeByUserId(PublicAuth.authGetUseId(request), request);
+    }
+    /**
+     * 获取当前用户所有分组（Tree）
+     */
+    @RequestAuth
+    @ResponseBody
+    @GetMapping("/device-group-tree/{parentId}")
+    public Result getUserDeviceGroupsTreeByParentId(@PathVariable("parentId") Integer parentId) {
+        return deviceGroupService.getDeviceGroupTreeByParentId(parentId, request);
     }
 
 }

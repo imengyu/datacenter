@@ -20,6 +20,12 @@ public interface CommonPermissionCheckService {
    * @param request 请求
    */
   CheckPermissionResult checkProductPermission(Integer productId, HttpServletRequest request);
+  /**
+   * 检查当前用户是否对指定分组有权限
+   * @param groupId 分组ID
+   * @param request 请求
+   */
+  CheckPermissionResult checkDeviceGroupPermission(Integer groupId, HttpServletRequest request);
 
 
 }

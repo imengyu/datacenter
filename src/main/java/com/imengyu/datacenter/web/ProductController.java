@@ -45,6 +45,17 @@ public class ProductController {
     }
 
     /**
+     * 获取当前用户所有产品下拉列表数据
+     */
+    @RequestAuth
+    @ResponseBody
+    @GetMapping("/product-list")
+    public Result getUserProductsList() {
+        return productService.getProductListByUserId(PublicAuth.authGetUseId(request), request);
+
+    }
+
+    /**
      * 删除产品
      * @param productId 产品ID
      */
@@ -77,6 +88,8 @@ public class ProductController {
                                       @RequestParam("userPass") String userPass) {
         return productService.getProductSecretKeyById(productId, userPass, request);
     }
+
+
 
 
     /**

@@ -3,6 +3,7 @@ package com.imengyu.datacenter.service.impl;
 import com.imengyu.datacenter.entity.CheckPermissionResult;
 import com.imengyu.datacenter.entity.Device;
 import com.imengyu.datacenter.entity.Product;
+import com.imengyu.datacenter.mapper.DeviceGroupMapper;
 import com.imengyu.datacenter.mapper.DeviceMapper;
 import com.imengyu.datacenter.mapper.ProductMapper;
 import com.imengyu.datacenter.repository.DeviceRepository;
@@ -24,6 +25,8 @@ public class CommonPermissionCheckServiceImpl implements CommonPermissionCheckSe
   private DeviceMapper deviceMapper = null;
   @Autowired
   private ProductMapper productMapper = null;
+  @Autowired
+  private DeviceGroupMapper deviceGroupMapper = null;
 
   /**
    * 检查当前用户是否对指定设备有权限
@@ -32,7 +35,7 @@ public class CommonPermissionCheckServiceImpl implements CommonPermissionCheckSe
    */
   public CheckPermissionResult checkDevicePermission(Integer deviceId, HttpServletRequest request) {
 
-    Integer productId = deviceMapper.findProductIdById(deviceId);
+    Integer productId = deviceMapper.getProductIdById(deviceId);
     int userId = PublicAuth.authGetUseId(request);
 
     if(productId == null)
@@ -44,7 +47,7 @@ public class CommonPermissionCheckServiceImpl implements CommonPermissionCheckSe
     if(userId != productUserId)
       return new CheckPermissionResult(Result.failure(ResultCodeEnum.FORIBBEN));
 
-    return new CheckPermissionResult();
+    return new CheckPermissionResult(userId);
   }
   /**
    * 检查当前用户是否对指定产品有权限
@@ -60,7 +63,23 @@ public class CommonPermissionCheckServiceImpl implements CommonPermissionCheckSe
     if(userId != productUserId)
       return new CheckPermissionResult(Result.failure(ResultCodeEnum.FORIBBEN));
 
-    return new CheckPermissionResult();
+    return new CheckPermissionResult(userId);
+  }
+  /**
+   * 检查当前用户是否对指定分组有权限
+   * @param groupId 分组ID
+   * @param request 请求
+   */
+  public CheckPermissionResult checkDeviceGroupPermission(Integer groupId, HttpServletRequest request) {
+
+    int userId = PublicAuth.authGetUseId(request);
+    Integer productUserId = deviceGroupMapper.getUserIdById(groupId);
+    if(productUserId == null)
+      return new CheckPermissionResult(Result.failure(ResultCodeEnum.NOT_FOUNT));
+    if(userId != productUserId)
+      return new CheckPermissionResult(Result.failure(ResultCodeEnum.FORIBBEN));
+
+    return new CheckPermissionResult(userId);
   }
 
 }

@@ -20,11 +20,18 @@ public interface DeviceRepository extends JpaRepository<Device, Integer>, JpaSpe
      * @param pageable 分页
      */
     Page<Device> findByProductId(Integer productId, Pageable pageable);
+
     /**
-     * 根据产品和组ID查询并分页
-     * @param productId 产品ID
+     * 根据用户ID查询并分页
+     * @param userId 用户ID
+     * @param pageable 分页
+     */
+    Page<Device> findByUserId(Integer userId, Pageable pageable);
+
+    /**
+     * 根据组ID查询并分页
      * @param groupId 组ID
      * @param pageable 分页
      */
-    Page<Device> findByProductIdAndGroupId(Integer productId, Integer groupId, Pageable pageable);
+    Page<Device> findByGroupId(Integer groupId, Pageable pageable);
 }
